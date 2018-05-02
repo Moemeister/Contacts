@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 null,
                 null,
-                null);
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
 
         //Verificando que no esten vacias y que si hay valores, muestre
         if (cursor != null && cursor.getCount() > 0){
