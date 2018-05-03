@@ -1,6 +1,7 @@
 package com.moesystems.contacts_parcial;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,6 +37,24 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
         holder.contact_name.setText(mData.get(position).getName());
         holder.contact_image.setImageResource(mData.get(position).getImg());
+
+        //set click listener
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //pasando la informacion a la actividad
+                Intent intent = new Intent(mContext,ContactInfoActivity.class);
+                intent.putExtra("ContactName",mData.get(position).getName());
+                intent.putExtra("ContactPhone",mData.get(position).getPhone());
+                intent.putExtra("ContactPic",mData.get(position).getImg());
+                //iniciar la actividad
+                mContext.startActivity(intent);
+
+
+
+            }
+        });
+
     }
 
     @Override

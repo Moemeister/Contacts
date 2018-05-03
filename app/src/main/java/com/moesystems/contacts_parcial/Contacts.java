@@ -3,6 +3,7 @@ package com.moesystems.contacts_parcial;
 public class Contacts {
     private String name;
     private int img;
+    private String phone;
 
     public Contacts() {
     }
@@ -10,6 +11,11 @@ public class Contacts {
     public Contacts(String name, int img) {
         this.name = name;
         this.img = img;
+    }
+    public Contacts(String name,String phone, int img) {
+        this.name = name;
+        this.img = img;
+        this.phone = phone;
     }
 
     public String getName() {
@@ -26,5 +32,13 @@ public class Contacts {
 
     public void setImg(int img) {
         this.img = img;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
