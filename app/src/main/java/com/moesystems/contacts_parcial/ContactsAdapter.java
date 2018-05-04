@@ -1,24 +1,39 @@
 package com.moesystems.contacts_parcial;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.media.Image;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder> {
 
     private Context mContext ;
-    private List<Contacts> mData ;
+    private ArrayList<Contacts> mData ;
+
+    private static boolean fav = false;
 
 
-    public ContactsAdapter(Context mContext, List<Contacts> mData) {
+    public ContactsAdapter(ArrayList<Contacts> contacts, Context cont) {
+        this.mData = contacts;
+        this.mContext = cont;
+    }
+    public ContactsAdapter(Context mContext, ArrayList<Contacts> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -33,7 +48,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         holder.contact_name.setText(mData.get(position).getName());
         holder.contact_image.setImageResource(mData.get(position).getImg());
@@ -42,31 +57,79 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //pasando la informacion a la actividad
-                Intent intent = new Intent(mContext,ContactInfoActivity.class);
-                intent.putExtra("ContactName",mData.get(position).getName());
-                intent.putExtra("ContactPhone",mData.get(position).getPhone());
-                intent.putExtra("ContactPic",mData.get(position).getImg());
-                //iniciar la actividad
-                mContext.startActivity(intent);
+                if(mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    //pasando la informacion a la actividad
+                    Intent intent = new Intent(mContext, ContactInfoActivity.class);
+                    intent.putExtra("ContactName", mData.get(position).getName());
+                    intent.putExtra("ContactPhone", mData.get(position).getPhone());
+                    intent.putExtra("ContactPic", mData.get(position).getImg());
+                    //iniciar la actividad
+                    mContext.startActivity(intent);
+                }/*else if (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Contacts.KEY_CONTACT,mData.get(position));
 
+                    FragmentViewer frag = new FragmentViewer();
+                    frag.setArguments(bundle);
 
+                    FragmentManager fragmentManager = new FragmentManager();
+                }*/
+            }
+
+        });
+        if(mData.get(position).yesorno())
+            holder.ib.setImageResource(R.drawable.yellow);
+        else
+            holder.ib.setImageResource(R.drawable.star);
+        //boton para agregar y quitar
+        holder.ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (favoritos(position)){
+                    holder.ib.setImageResource(R.drawable.yellow);
+                    //Funcion del main que agrega a la lista de favoritos
+                    ((MainActivity)mContext).addFavorites(mData.get(position));
+
+                }
+                else {
+                    holder.ib.setImageResource(R.drawable.star);
+                    //elimina de favoritos
+                    ((MainActivity)mContext).quitar(mData.get(position).getName());
+
+                }
 
             }
         });
 
     }
 
+
     @Override
     public int getItemCount() {
         return mData.size();
     }
+    public boolean favoritos(int position){
+        mData.get(position).set(!mData.get(position).yesorno());
+        return mData.get(position).yesorno();
+    }
+    public void setTrue(){
+        fav=true;
+    }
+
+    public void setFalse(){
+        fav=false;
+    }
+    public boolean isOnBookmark() {
+        return fav;
+    }
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView contact_name;
         ImageView contact_image;
         CardView cardView ;
+        ImageButton ib;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -74,6 +137,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             contact_name = (TextView) itemView.findViewById(R.id.contact_name) ;
             contact_image = (ImageView) itemView.findViewById(R.id.contact_image);
             cardView = (CardView) itemView.findViewById(R.id.cardview_id);
+            ib =  (ImageButton) itemView.findViewById(R.id.fav_vacio);
 
 
         }

@@ -2,7 +2,9 @@ package com.moesystems.contacts_parcial;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Build;
 import android.provider.ContactsContract;
@@ -12,18 +14,22 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    List<Contacts> list;
+    ArrayList<Contacts> list,favs;
+    RecyclerView myrv;
+    RecyclerView rv;
+    ContactsAdapter myAdapter;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    Button btn1,btn2;
+    ContactsAdapter adapter;
 
-    ContentResolver contactProvider;
-    Cursor cursor;
-    Cursor nCursor;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,50 +37,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         list = new ArrayList<>();
+        favs= new ArrayList<>();
+        btn1 = findViewById(R.id.btn_contactos);
+        btn2 = findViewById(R.id.btn_favoritos);
         addContacts();
-        /*ContentResolver cr = getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null,
-                null, null,  ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-        if (cur.getCount() > 0) {
-            while (cur.moveToNext()) {
-                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                //list.add(new Contacts(cur.getString(0)+"",R.drawable.empty_face));
-                Log.i("Names", name);
-                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
-                {
-                    // Query phone here. Covered next
-                    Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id,null, null);
-                    while (phones.moveToNext()) {
-                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        Log.i("Number", phoneNumber);
-                        Log.i("lel", cur.getString(1)+"");
-                        list.add(new Contacts(name+"",phoneNumber+"",R.drawable.empty_face));
 
-                    }
-                    phones.close();
-                }
-
-            }
-        }*/
-        /*ContentResolver contactProvider = getContentResolver();
-        //Instanciando lector de cada fila, indicandole que columnas usar con el modelo anterior
-        Cursor cursor = contactProvider.query(ContactsContract.Contacts.CONTENT_URI,
-                null,
-                null,
-                null,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-
-        //Verificando que no esten vacias y que si hay valores, muestre
-        if (cursor != null && cursor.getCount() > 0){
-            //StringBuilder stringBuilderResult = new StringBuilder();
-            //LLenando el recyclerview
-            while (cursor.moveToNext()){
-                list.add(new Contacts(cursor.getString(0)+"",R.drawable.empty_face));
-            }
-        }*/
-        RecyclerView myrv = (RecyclerView) findViewById(R.id.recyclerview_id);
-        ContactsAdapter myAdapter = new ContactsAdapter(this,list);
+        myrv = (RecyclerView) findViewById(R.id.recyclerview_id);
+        myAdapter = new ContactsAdapter(this,list);
+        //myrv.setLayoutManager(new GridLayoutManager(this,getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE? 2:3));
         myrv.setLayoutManager(new GridLayoutManager(this,3));
         myrv.setAdapter(myAdapter);
 
@@ -90,12 +60,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    public void boton1_list(View v){
+        myAdapter.setFalse();
+       // btn1.setBackgroundColor(getResources().getColor(R.color.azul));
+        //btn2.setBackgroundColor(getResources().getColor(R.color.skyblue));
+        myAdapter = new ContactsAdapter(list,v.getContext());
+        myrv.setAdapter(myAdapter);
+    }
+    public void boton2_favorites(View v){
+        myAdapter.setTrue();
+        //btn2.setBackgroundColor(getResources().getColor(R.color.azul));
+       // btn1.setBackgroundColor(getResources().getColor(R.color.skyblue));
+        myAdapter = new ContactsAdapter(favs,v.getContext());
+        myrv.setAdapter(myAdapter);
+    }
 
     public void addContacts() {
         try {
             Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-            list.add(new Contacts("MONKA", "2342-2323",R.drawable.empty_face));
-            list.add(new Contacts("MONKAOMEGA", "2334-2323",R.drawable.empty_face));
             while (phones.moveToNext()) {
                 String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -104,6 +86,24 @@ public class MainActivity extends AppCompatActivity {
             phones.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+    public void addFavorites(Contacts favorites){
+        favs.add(favorites);
+    }
+    public void quitar(String GameName){
+        int i=0;
+
+        for(Contacts game : favs){
+            if(game.getName() == GameName){
+                break;
+            }
+            i++;
+        }
+        favs.remove(i);
+        if(myAdapter.isOnBookmark()){
+            myAdapter = new ContactsAdapter(favs, this);
+            myrv.setAdapter(myAdapter);
         }
     }
     

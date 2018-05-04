@@ -1,9 +1,13 @@
 package com.moesystems.contacts_parcial;
 
-public class Contacts {
+import java.io.Serializable;
+
+public class Contacts implements Serializable{
     private String name;
     private int img;
     private String phone;
+    private boolean favorito;
+    public static String KEY_CONTACT = "KEY_CONTACT";
 
     public Contacts() {
     }
@@ -16,6 +20,7 @@ public class Contacts {
         this.name = name;
         this.img = img;
         this.phone = phone;
+        favorito = false;
     }
 
     public String getName() {
@@ -40,5 +45,13 @@ public class Contacts {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void set(boolean favorito ){
+        this.favorito = favorito;
+    }
+
+    public boolean yesorno(){
+        return favorito;
     }
 }
