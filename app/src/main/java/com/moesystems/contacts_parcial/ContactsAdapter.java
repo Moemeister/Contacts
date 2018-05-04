@@ -9,6 +9,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +22,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder> {
-
+public abstract class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder> {
+    private FragmentViewer fragmentViewer;
     private Context mContext ;
     private ArrayList<Contacts> mData ;
+
 
     private static boolean fav = false;
 
@@ -57,25 +59,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    //pasando la informacion a la actividad
-                    Intent intent = new Intent(mContext, ContactInfoActivity.class);
-                    intent.putExtra("ContactName", mData.get(position).getName());
-                    intent.putExtra("ContactPhone", mData.get(position).getPhone());
-                    intent.putExtra("ContactPic", mData.get(position).getImg());
-                    //iniciar la actividad
-                    mContext.startActivity(intent);
-                }/*else if (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(Contacts.KEY_CONTACT,mData.get(position));
 
-                    FragmentViewer frag = new FragmentViewer();
-                    frag.setArguments(bundle);
-
-                    FragmentManager fragmentManager = new FragmentManager();
-                }*/
+                    onClickCard(mData.get(position));
             }
-
         });
         if(mData.get(position).yesorno())
             holder.ib.setImageResource(R.drawable.yellow);
@@ -119,7 +105,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     public void setFalse(){
         fav=false;
     }
-    public boolean isOnBookmark() {
+    public boolean isOnFavorites() {
         return fav;
     }
 
@@ -142,4 +128,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
         }
     }
+
+    public abstract void onClickCard (Contacts contacts);
 }

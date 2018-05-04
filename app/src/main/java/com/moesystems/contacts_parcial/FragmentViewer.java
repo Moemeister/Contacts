@@ -13,14 +13,16 @@ import android.widget.TextView;
 public class FragmentViewer extends Fragment {
     TextView nombre,telefono;
     ImageView picture;
-/*
-    public static FragmentViewer newIntance (Contacts contacto){
+    Contacts c;
+    /*public static FragmentViewer newIntance (Contacts contacto){
         FragmentViewer fragment = new FragmentViewer();
         Bundle bundle = new Bundle();
 
 
         bundle.putSerializable(contacto);
     }*/
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -30,15 +32,15 @@ public class FragmentViewer extends Fragment {
         nombre =  view.findViewById(R.id.profile_name);
         telefono =  view.findViewById(R.id.profile_phone);
         picture = view.findViewById(R.id.profile_pic);
-
-        Bundle bundle = this.getArguments();
-        if(bundle != null) {
-            Contacts c = (Contacts) bundle.getSerializable("contactos");
-            nombre.setText(c.getName());
-            telefono.setText(c.getPhone());
-            picture.setImageResource(c.getImg());
-        }
+        c = new Contacts();
+        updateContact(c);
         return view;
+    }
+    public void updateContact (Contacts contact){
+        nombre.setText(contact.getName());
+        telefono.setText(contact.getPhone());
+        picture.setImageResource(contact.getImg());
+
     }
 
 }

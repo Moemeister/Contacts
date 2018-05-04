@@ -1,8 +1,10 @@
 package com.moesystems.contacts_parcial;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Contacts implements Serializable{
+
+public class Contacts implements Parcelable{
     private String name;
     private int img;
     private String phone;
@@ -12,16 +14,32 @@ public class Contacts implements Serializable{
     public Contacts() {
     }
 
-    public Contacts(String name, int img) {
-        this.name = name;
-        this.img = img;
-    }
     public Contacts(String name,String phone, int img) {
         this.name = name;
         this.img = img;
         this.phone = phone;
         favorito = false;
     }
+
+    protected Contacts(Parcel in) {
+        //para leer debe estar en el mismo orden que los escribo
+        name = in.readString();
+        phone = in.readString();
+        img = in.readInt();
+        favorito = in.readByte() != 0;
+    }
+
+    public static final Creator<Contacts> CREATOR = new Creator<Contacts>() {
+        @Override
+        public Contacts createFromParcel(Parcel in) {
+            return new Contacts(in);
+        }
+
+        @Override
+        public Contacts[] newArray(int size) {
+            return new Contacts[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -53,5 +71,18 @@ public class Contacts implements Serializable{
 
     public boolean yesorno(){
         return favorito;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeString(phone);
+        parcel.writeInt(img);
+        parcel.writeByte((byte) (favorito?1:0));
     }
 }

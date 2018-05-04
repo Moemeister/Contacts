@@ -1,7 +1,10 @@
 package com.moesystems.contacts_parcial;
 
 import android.Manifest;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -24,11 +27,12 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     ArrayList<Contacts> list,favs;
     RecyclerView myrv;
-    RecyclerView rv;
+    FragmentViewer fragmentViewer;
     ContactsAdapter myAdapter;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     Button btn1,btn2;
-    ContactsAdapter adapter;
+    public static String KEY_LIST = "KEY_LIST";
+    public static String KEY_LIST_FAVS = "KEY_LIST2";
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -36,19 +40,50 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        list = new ArrayList<>();
-        favs= new ArrayList<>();
+        if (savedInstanceState != null){
+            list = savedInstanceState.getParcelableArrayList(KEY_LIST);
+            favs= savedInstanceState.getParcelableArrayList(KEY_LIST_FAVS);
+        }else{
+            list = new ArrayList<>();
+            favs= new ArrayList<>();
+            addContacts();
+        }
+
         btn1 = findViewById(R.id.btn_contactos);
         btn2 = findViewById(R.id.btn_favoritos);
-        addContacts();
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+            fragmentViewer = new FragmentViewer();
+            fragmentTransaction.add(R.id.viewer, fragmentViewer);
+            fragmentTransaction.commit();
+        }
         myrv = (RecyclerView) findViewById(R.id.recyclerview_id);
-        myAdapter = new ContactsAdapter(this,list);
+        myAdapter = new ContactsAdapter(this,list){
+            @Override
+            public void onClickCard(Contacts contacts) {
+                //pasando la informacion a la actividad
+                intents(contacts);
+            }
+        };
         //myrv.setLayoutManager(new GridLayoutManager(this,getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE? 2:3));
-        myrv.setLayoutManager(new GridLayoutManager(this,3));
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            myrv.setLayoutManager(new GridLayoutManager(this,2));
+        }else{
+            myrv.setLayoutManager(new GridLayoutManager(this,3));
+        }
         myrv.setAdapter(myAdapter);
 
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(KEY_LIST,list);
+        outState.putParcelableArrayList(KEY_LIST_FAVS,favs);
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,int[] grantResults) {
         if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
@@ -64,14 +99,26 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.setFalse();
        // btn1.setBackgroundColor(getResources().getColor(R.color.azul));
         //btn2.setBackgroundColor(getResources().getColor(R.color.skyblue));
-        myAdapter = new ContactsAdapter(list,v.getContext());
+        myAdapter = new ContactsAdapter(list, v.getContext()) {
+            @Override
+            public void onClickCard(Contacts contacts) {
+                //pasando la informacion a la actividad
+                intents(contacts);
+            }
+        };
         myrv.setAdapter(myAdapter);
     }
     public void boton2_favorites(View v){
         myAdapter.setTrue();
         //btn2.setBackgroundColor(getResources().getColor(R.color.azul));
        // btn1.setBackgroundColor(getResources().getColor(R.color.skyblue));
-        myAdapter = new ContactsAdapter(favs,v.getContext());
+        myAdapter = new ContactsAdapter(favs, v.getContext()) {
+            @Override
+            public void onClickCard(Contacts contacts) {
+                //pasando la informacion a la actividad
+                intents(contacts);
+            }
+        };
         myrv.setAdapter(myAdapter);
     }
 
@@ -94,16 +141,36 @@ public class MainActivity extends AppCompatActivity {
     public void quitar(String GameName){
         int i=0;
 
-        for(Contacts game : favs){
-            if(game.getName() == GameName){
+        for(Contacts con : favs){
+            if(con.getName() == GameName){
                 break;
             }
+
             i++;
         }
         favs.remove(i);
-        if(myAdapter.isOnBookmark()){
-            myAdapter = new ContactsAdapter(favs, this);
+        if(myAdapter.isOnFavorites()){
+            myAdapter = new ContactsAdapter(favs, this) {
+                @Override
+                public void onClickCard(Contacts contacts) {
+                    //pasando la informacion a la actividad
+                    intents(contacts);
+                }
+            };
             myrv.setAdapter(myAdapter);
+        }
+    }
+
+    public void intents(Contacts contacts){
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
+            intent.putExtra(Contacts.KEY_CONTACT, contacts);
+            //iniciar la actividad
+            startActivity(intent);
+        }else if (getResources().getConfiguration().orientation ==  Configuration.ORIENTATION_LANDSCAPE){
+
+            fragmentViewer.updateContact(contacts);
+
         }
     }
     

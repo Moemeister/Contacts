@@ -20,14 +20,13 @@ public class ContactInfoActivity extends AppCompatActivity {
 
         //reciviendo los datos
         Intent intent = getIntent();
-        String name = intent.getExtras().getString("ContactName");
-        String phone = intent.getExtras().getString("ContactPhone");
-        int pic = intent.getExtras().getInt("ContactPic");
+        Contacts contacts = intent.getExtras().getParcelable(Contacts.KEY_CONTACT);
+
 
         //setenado los valores
-        tvName.setText(name);
-        tvPhone.setText(phone);
-        img.setImageResource(pic);
+        tvName.setText(contacts.getName());
+        tvPhone.setText(contacts.getPhone());
+        img.setImageResource(contacts.getImg());
 
     }
 }

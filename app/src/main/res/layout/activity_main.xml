@@ -38,12 +38,14 @@
         android:layout_height="match_parent"
         ></android.support.v7.widget.RecyclerView>
 </LinearLayout>
-    <android.support.design.widget.FloatingActionButton
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/flotating"
+        android:src="@drawable/ic_add_black_24dp"
         android:scaleType="fitXY"
         android:layout_gravity="end|bottom"
         android:layout_margin="8dp"
+        android:clickable="true"
+
         />
 </FrameLayout>
