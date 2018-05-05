@@ -1,6 +1,7 @@
 package com.moesystems.contacts_parcial;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
@@ -29,10 +30,12 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView myrv;
     FragmentViewer fragmentViewer;
     ContactsAdapter myAdapter;
+    Contacts addedit;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     Button btn1,btn2;
     public static String KEY_LIST = "KEY_LIST";
     public static String KEY_LIST_FAVS = "KEY_LIST2";
+    public static final int ADD_CONTACT = 2;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -138,11 +141,11 @@ public class MainActivity extends AppCompatActivity {
     public void addFavorites(Contacts favorites){
         favs.add(favorites);
     }
-    public void quitar(String GameName){
+    public void quitar(String ContactName){
         int i=0;
 
         for(Contacts con : favs){
-            if(con.getName() == GameName){
+            if(con.getName() == ContactName){
                 break;
             }
 
@@ -171,6 +174,52 @@ public class MainActivity extends AppCompatActivity {
 
             fragmentViewer.updateContact(contacts);
 
+        }
+    }
+    /*public void addContacttoList(ContactsAdapter adapter, ArrayList<Contacts> contactList, int position){
+        addedit = contactList.get(position);
+        myAdapter = adapter;
+        Intent intent = new Intent(this,AddContacts.class);
+        intent.putExtra(AddContacts.EXTRA_CONTACT, addedit);
+        startActivity(intent,ED);
+    }*/
+    public void agregarContacto(View view){
+        Intent addIntent = new Intent(this, AddContacts.class);
+        addedit = new Contacts();
+        startActivityForResult(addIntent, ADD_CONTACT);
+
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case ADD_CONTACT:
+                if(resultCode == Activity.RESULT_OK) {
+                    Contacts c = data.getParcelableExtra(AddContacts.EXTRA_CONTACT);
+                    list.add(c);
+
+                }
+                addedit = null;
+                break;
+
+/*
+            case EDIT_CONTACT:
+                if(resultCode == Activity.RESULT_OK) {
+                    Contact c = data.getParcelableExtra(EditActivity.EXTRA_CONTACT);
+                    Toast.makeText(this, c.getName()+" "+c.getLastName(), Toast.LENGTH_SHORT).show();
+                    allContactsFrag.getAdapter().updateContact(editing, c);
+                    if(editing.isFavorite()) {
+                        favContactsFrag.getAdapter().updateContact(editing, c);
+                    }
+                    else if(c.isFavorite()){
+                        favContactsFrag.getAdapter().addContact(c);
+                    }
+
+                    editing_adapter.updateDialog(c);
+                }
+                editing = null;
+                editing_adapter = null;
+                break;*/
         }
     }
     

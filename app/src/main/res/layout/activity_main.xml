@@ -45,6 +45,7 @@
         android:scaleType="fitXY"
         android:layout_gravity="end|bottom"
         android:layout_margin="8dp"
+        android:onClick="agregarContacto"
         android:clickable="true"
 
         />
