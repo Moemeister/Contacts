@@ -86,28 +86,34 @@ public class MainActivity extends AppCompatActivity {
         EditText filter = (EditText) findViewById(R.id.filter);
         filter.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
             public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
+                filterForContacts(editable.toString());
             }
         });
+
     }
-    private void filter(String text){
+    private void filterForContacts(String text){
         ArrayList<Contacts> filteredList = new ArrayList<>();
         for(Contacts item : list){
             if(item.getName().toLowerCase().contains(text.toLowerCase())){
                 filteredList.add(item);
             }
         }
+
+        myAdapter.filterList(filteredList);
+    }
+    private void filterForFavs(String text){
+        ArrayList<Contacts> filteredList = new ArrayList<>();
+        for(Contacts item : favs){
+            if(item.getName().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(item);
+            }
+        }
+
         myAdapter.filterList(filteredList);
     }
 
@@ -141,6 +147,18 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         myrv.setAdapter(myAdapter);
+        EditText filter = (EditText) findViewById(R.id.filter);
+        filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filterForContacts(editable.toString());
+            }
+        });
+
     }
     public void boton2_favorites(View v){
         myAdapter.setTrue();
@@ -154,6 +172,17 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         myrv.setAdapter(myAdapter);
+        EditText filter = (EditText) findViewById(R.id.filter);
+        filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filterForFavs(editable.toString());
+            }
+        });
     }
 
     public void addContacts() {
