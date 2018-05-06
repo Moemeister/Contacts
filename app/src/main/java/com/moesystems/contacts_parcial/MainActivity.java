@@ -19,9 +19,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -80,7 +83,32 @@ public class MainActivity extends AppCompatActivity {
             myrv.setLayoutManager(new GridLayoutManager(this,3));
         }
         myrv.setAdapter(myAdapter);
+        EditText filter = (EditText) findViewById(R.id.filter);
+        filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
+    }
+    private void filter(String text){
+        ArrayList<Contacts> filteredList = new ArrayList<>();
+        for(Contacts item : list){
+            if(item.getName().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(item);
+            }
+        }
+        myAdapter.filterList(filteredList);
     }
 
     @Override

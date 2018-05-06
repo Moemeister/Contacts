@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -128,6 +129,9 @@ public abstract class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapt
 
         }
     }
-
+    public void filterList(ArrayList<Contacts> filteredList) {
+        mData = filteredList;
+        notifyDataSetChanged();
+    }
     public abstract void onClickCard (Contacts contacts);
 }
