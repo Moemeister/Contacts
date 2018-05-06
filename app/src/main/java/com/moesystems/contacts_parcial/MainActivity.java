@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
@@ -13,8 +14,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -37,27 +41,47 @@ public class MainActivity extends AppCompatActivity {
     ContactsAdapter myAdapter;
     Contacts addedit;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    private static final int PERMISSIONS_REQUEST_CALL = 101;
+
     Button btn1,btn2;
     public static String KEY_LIST = "KEY_LIST";
     public static String KEY_LIST_FAVS = "KEY_LIST2";
     public static final int ADD_CONTACT = 2;
     public static final int EDIT_CONTACT = 1;
+    private static boolean firstime=true;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+       // askForPermission(Manifest.permission.CALL_PHONE,0);
+        //askForPermission(Manifest.permission.READ_CONTACTS,1);
         if (savedInstanceState != null){
             list = savedInstanceState.getParcelableArrayList(KEY_LIST);
             favs= savedInstanceState.getParcelableArrayList(KEY_LIST_FAVS);
         }else{
             list = new ArrayList<>();
             favs= new ArrayList<>();
-            addContacts();
+            //addContacts();
         }
+        //ASKING FOR PERMISSIONS
+        // PERMISSION READ CONTACTS
+        int permissionCheck = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED){
+            addContacts();
 
+        }else {
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS},PERMISSIONS_REQUEST_READ_CONTACTS);
+        }
+        //PERMISSION CALLS
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CALL_PHONE}, PERMISSIONS_REQUEST_CALL);
+        }
         btn1 = findViewById(R.id.btn_contactos);
         btn2 = findViewById(R.id.btn_favoritos);
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -94,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 filterForContacts(editable.toString());
             }
         });
+        myrv.setAdapter(myAdapter);
 
     }
     private void filterForContacts(String text){
@@ -123,16 +148,20 @@ public class MainActivity extends AppCompatActivity {
         outState.putParcelableArrayList(KEY_LIST_FAVS,favs);
         super.onSaveInstanceState(outState);
     }
-
+    //METODO QUE SIRVE PARA VERIFICAR SI YA SE CONCEDIERON LOS PERMISOS Y LE SE MANDA EL ADAPTER NUEVANENTE PARA INFLAR
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,@NonNull String permissions[], @NonNull int[] grantResults) {
+        // Make sure it's our original READ_CONTACTS request
         if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted
                 addContacts();
+                myrv.setAdapter(myAdapter);
+                Toast.makeText(this, "Read Contacts permission granted", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Until you grant the permission, we canot display the names", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Read Contacts permission denied", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
     public void boton1_list(View v){
