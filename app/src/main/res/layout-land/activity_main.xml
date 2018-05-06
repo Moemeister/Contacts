@@ -44,6 +44,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 tools:layout="@layout/viewer_fragment"
+                android:scrollbars="vertical"
                 android:layout_weight="1">
 
             </FrameLayout>
@@ -59,7 +60,7 @@
         android:scaleType="fitXY"
         android:layout_gravity="end|bottom"
         android:layout_margin="8dp"
-        android:onClick="addContacttoList"
+        android:onClick="agregarContacto"
         android:clickable="true"
 
         />

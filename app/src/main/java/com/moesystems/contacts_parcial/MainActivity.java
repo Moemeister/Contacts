@@ -10,9 +10,11 @@ import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public static String KEY_LIST = "KEY_LIST";
     public static String KEY_LIST_FAVS = "KEY_LIST2";
     public static final int ADD_CONTACT = 2;
+    public static final int EDIT_CONTACT = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -176,13 +179,13 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-    /*public void addContacttoList(ContactsAdapter adapter, ArrayList<Contacts> contactList, int position){
+    public void editarContacto(ContactsAdapter adapter, ArrayList<Contacts> contactList, int position){
         addedit = contactList.get(position);
         myAdapter = adapter;
         Intent intent = new Intent(this,AddContacts.class);
         intent.putExtra(AddContacts.EXTRA_CONTACT, addedit);
-        startActivity(intent,ED);
-    }*/
+        startActivityForResult(intent,EDIT_CONTACT);
+    }
     public void agregarContacto(View view){
         Intent addIntent = new Intent(this, AddContacts.class);
         addedit = new Contacts();
@@ -202,25 +205,16 @@ public class MainActivity extends AppCompatActivity {
                 addedit = null;
                 break;
 
-/*
+
             case EDIT_CONTACT:
                 if(resultCode == Activity.RESULT_OK) {
-                    Contact c = data.getParcelableExtra(EditActivity.EXTRA_CONTACT);
-                    Toast.makeText(this, c.getName()+" "+c.getLastName(), Toast.LENGTH_SHORT).show();
-                    allContactsFrag.getAdapter().updateContact(editing, c);
-                    if(editing.isFavorite()) {
-                        favContactsFrag.getAdapter().updateContact(editing, c);
-                    }
-                    else if(c.isFavorite()){
-                        favContactsFrag.getAdapter().addContact(c);
-                    }
+                    Contacts c = data.getParcelableExtra(AddContacts.EXTRA_CONTACT);
+                    list.add(c);
 
-                    editing_adapter.updateDialog(c);
+                    break;
                 }
-                editing = null;
-                editing_adapter = null;
-                break;*/
         }
     }
+
     
 }

@@ -3,6 +3,8 @@ package com.moesystems.contacts_parcial;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +22,10 @@ public class AddContacts extends AppCompatActivity {
     private Button boton;
     private Context mContext;
     private ArrayList<Contacts> mData;
-    public static final String EXTRA_CONTACT = "com.moesystems.contacts.EXTRA_CONTACT";
+    public static final String EXTRA_CONTACT = "EXTRA_CONTACT";
+    private static final int PICK_IMAGE = 100;
+    private Uri imageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,12 +36,20 @@ public class AddContacts extends AppCompatActivity {
         img = (ImageView) findViewById(R.id.add_picture);
         boton = (Button) findViewById(R.id.botonadd);
 
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openGallery();
+            }
+        });
+
+
         Intent intent = getIntent();
         contacts = intent.hasExtra(EXTRA_CONTACT)? (Contacts)intent.getParcelableExtra(EXTRA_CONTACT): (new Contacts());
 
         nombre.setText(contacts.getName());
         telefono.setText(contacts.getPhone());
-        img.setImageResource(R.drawable.empty_face);
+
 
 
     }
@@ -44,9 +57,22 @@ public class AddContacts extends AppCompatActivity {
 
         contacts.setName(nombre.getText().toString());
         contacts.setPhone(telefono.getText().toString());
+
         Intent returnIntent = new Intent();
         returnIntent.putExtra(EXTRA_CONTACT, contacts);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
+    }
+    private void openGallery(){
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+            imageUri = data.getData();
+            img.setImageURI(imageUri);
+        }else {
+            img.setImageResource(R.drawable.empty_face);
+        }
     }
 }
