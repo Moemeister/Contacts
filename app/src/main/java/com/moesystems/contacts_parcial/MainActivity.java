@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     ContactsAdapter myAdapter;
     Contacts addedit;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
-    private static final int PERMISSIONS_REQUEST_CALL = 101;
+
 
     Button btn1,btn2;
     public static String KEY_LIST = "KEY_LIST";
@@ -78,10 +78,7 @@ public class MainActivity extends AppCompatActivity {
         }else {
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS},PERMISSIONS_REQUEST_READ_CONTACTS);
         }
-        //PERMISSION CALLS
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CALL_PHONE}, PERMISSIONS_REQUEST_CALL);
-        }
+
         btn1 = findViewById(R.id.btn_contactos);
         btn2 = findViewById(R.id.btn_favoritos);
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
