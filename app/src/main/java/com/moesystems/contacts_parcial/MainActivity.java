@@ -213,11 +213,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void addContacts() {
         try {
+            String var="";
             Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" ASC");
             while (phones.moveToNext()) {
                 String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                list.add(new Contacts(name, phoneNumber,R.drawable.empty_face));
+                if(!(var.equals(name))){
+                    list.add(new Contacts(name, phoneNumber,R.drawable.empty_face));
+                }
+                var=name;
+
             }
             phones.close();
         } catch (Exception e) {

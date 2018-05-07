@@ -40,7 +40,57 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/profile_name"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:gravity="center"
+                android:layout_below="@+id/profile_phone">
+                <ImageView
+                    android:id="@+id/botonllamar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_call_black_24dp"
 
+                    android:scaleType="fitXY"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/profile_phone"
+                    android:clickable="true"
+                    />
+                <ImageView
+                    android:id="@+id/editar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_mode_edit_black_24dp"
+
+                    android:scaleType="fitXY"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/profile_phone"
+                    android:clickable="true"
+                    />
+                <ImageView
+                    android:id="@+id/borrar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_delete_black_24dp"
+
+                    android:scaleType="fitXY"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/profile_phone"
+                    android:clickable="true"
+                    />
+                <ImageView
+                    android:id="@+id/share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_share_black_24dp"
+                    android:scaleType="fitXY"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/profile_phone"
+                    android:clickable="true"
+                    />
+
+            </LinearLayout>
         </RelativeLayout>
 
     </ScrollView>
