@@ -24,7 +24,7 @@
             android:id="@+id/lbl_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre: "
+            android:text="@string/nombre"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/txt_name_add"
@@ -39,7 +39,7 @@
             android:id="@+id/lbl_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Telefono: "
+            android:text="@string/telefono"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/txt_phone_add"
@@ -52,7 +52,7 @@
         android:id="@+id/botonadd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Contact"
+        android:text="@string/add_contact"
         android:layout_marginTop="12dp"
         android:onClick="saveContact"
         android:layout_gravity="center"/>

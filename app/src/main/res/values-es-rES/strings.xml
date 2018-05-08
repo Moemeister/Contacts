@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Contactos</string>
+    <string name="search">Buscar</string>
+    <string name="contacts">Contactos</string>
+    <string name="favorites">Favoritos</string>
+    <string name="nombre">Name:</string>
+    <string name="telefono">Phone Number:</string>
+    <string name="add_contact">Añadir Contacto</string>
+</resources>

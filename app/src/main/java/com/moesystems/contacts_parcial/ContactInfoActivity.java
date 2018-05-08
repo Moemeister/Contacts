@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +19,7 @@ public class ContactInfoActivity extends AppCompatActivity {
     private ImageView img;
     private ImageView botonllamar;
     String number;
-    private static final int PERMISSIONS_REQUEST_CALL = 101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +33,7 @@ public class ContactInfoActivity extends AppCompatActivity {
         //reciviendo los datos
         Intent intent = getIntent();
         Contacts contacts = intent.getExtras().getParcelable(Contacts.KEY_CONTACT);
-        //PERMISSION CALLS
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ContactInfoActivity.this, new String[]{Manifest.permission.CALL_PHONE}, PERMISSIONS_REQUEST_CALL);
-        }
+
 
         //setenado los valores
         tvName.setText(contacts.getName());

@@ -2,6 +2,8 @@
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="@drawable/border"
+    android:layout_marginBottom="4dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/cardview_id"
@@ -10,7 +12,8 @@
     android:foreground="?android:attr/selectableItemBackground"
     android:layout_width="0dp"
     android:layout_weight="1"
-    android:layout_height="190dp"
+    android:background="@drawable/border"
+    android:layout_height="200dp"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp"
     cardview:cardCornerRadius="4dp">
@@ -23,16 +26,17 @@
         <ImageView
             android:id="@+id/contact_image"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="158dp"
             android:scaleType="centerCrop"
-            android:background="#2d2d2d"/>
+            android:background="@color/test_color"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/dark"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/contact_name"
-                android:textColor="#2d2d2d"
+                android:textColor="@color/white"
                 android:textSize="12sp"
                 android:gravity="center"
                 android:layout_width="0dp"
@@ -45,7 +49,7 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/star"
                 android:scaleType="fitCenter"
-                android:background="#fff"
+                android:background="@color/dark"
 
                 />
 

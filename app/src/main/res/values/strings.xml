@@ -1,4 +1,10 @@
 <resources>
-    <string name="app_name">Contacts_Parcial</string>
+    <string name="app_name">Contacts</string>
+    <string name="search">Search</string>
+    <string name="contacts">Contacts</string>
+    <string name="favorites">Favorites</string>
+    <string name="nombre">Nombre:</string>
+    <string name="telefono">Telefono:</string>
+    <string name="add_contact">Add Contact</string>
 
 </resources>

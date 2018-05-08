@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="skyblue">#007eb3</color>
+    <color name="colorPrimary">#1b292b</color>
+    <color name="colorPrimaryDark">#1b292b</color>
+    <color name="colorAccent">#00AFF8</color>
+    <color name="dark">#12191A</color>
+    <color name="white">#fff</color>
+    <color name="skyblue">#00AFF8</color>
+    <color name="btnskyblue">#007eb3</color>
+    <color name="azul">#02597e</color>
+    <color name="test_color">#2d2d2d</color>
 </resources>

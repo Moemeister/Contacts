@@ -27,6 +27,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             favs= new ArrayList<>();
             //addContacts();
         }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         //ASKING FOR PERMISSIONS
         // PERMISSION READ CONTACTS
         int permissionCheck = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS);
@@ -117,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         });
         myrv.setAdapter(myAdapter);
 
+
     }
     private void filterForContacts(String text){
         ArrayList<Contacts> filteredList = new ArrayList<>();
@@ -163,8 +166,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public void boton1_list(View v){
         myAdapter.setFalse();
-       // btn1.setBackgroundColor(getResources().getColor(R.color.azul));
-        //btn2.setBackgroundColor(getResources().getColor(R.color.skyblue));
+        btn1.setBackgroundColor(getResources().getColor(R.color.azul));
+        btn2.setBackgroundColor(getResources().getColor(R.color.skyblue));
         myAdapter = new ContactsAdapter(list, v.getContext()) {
             @Override
             public void onClickCard(Contacts contacts) {
@@ -188,8 +191,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public void boton2_favorites(View v){
         myAdapter.setTrue();
-        //btn2.setBackgroundColor(getResources().getColor(R.color.azul));
-       // btn1.setBackgroundColor(getResources().getColor(R.color.skyblue));
+        btn2.setBackgroundColor(getResources().getColor(R.color.azul));
+        btn1.setBackgroundColor(getResources().getColor(R.color.skyblue));
         myAdapter = new ContactsAdapter(favs, v.getContext()) {
             @Override
             public void onClickCard(Contacts contacts) {
@@ -234,7 +237,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public void quitar(String ContactName){
         int i=0;
-
         for(Contacts con : favs){
             if(con.getName() == ContactName){
                 break;
@@ -292,16 +294,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 addedit = null;
                 break;
-
-
-            case EDIT_CONTACT:
-                if(resultCode == Activity.RESULT_OK) {
-                    Contacts c = data.getParcelableExtra(AddContacts.EXTRA_CONTACT);
-                    list.add(c);
-
-                    break;
-                }
         }
+        myrv.setAdapter(myAdapter);
     }
 
     
