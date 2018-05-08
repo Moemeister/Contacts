@@ -1,6 +1,7 @@
 package com.moesystems.contacts_parcial;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,11 +18,10 @@ public class FragmentViewer extends Fragment {
     TextView nombre,telefono;
     ImageView picture;
     Contacts c;
-    ImageView botonllamar;
+    ImageView botonllamar,compartir,editar,borrar;
     String number;
     String getnumero,getnombre;
-    ImageView compartir;
-
+    FragmentListener mCallback;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -33,6 +33,8 @@ public class FragmentViewer extends Fragment {
         picture = view.findViewById(R.id.profile_pic);
         botonllamar = view.findViewById(R.id.botonllamar);
         compartir =  view.findViewById(R.id.share);
+        editar = view.findViewById(R.id.editar);
+        borrar = view.findViewById(R.id.borrar);
         c = new Contacts();
         updateContact(c);
 
@@ -55,6 +57,22 @@ public class FragmentViewer extends Fragment {
                 startActivity(sendIntent);
             }
         });
+
+        editar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallback.onEdit();
+            }
+        });
+        borrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallback.onDelete();
+            }
+        });
+
+
+
         return view;
     }
     public void updateContact (Contacts contact){
@@ -75,18 +93,26 @@ public class FragmentViewer extends Fragment {
         }
         startActivity(callIntent);
     }
-    public void Share2(View view)
-    {
-        Intent intent = getActivity().getIntent();
-        Contacts contacts = intent.getExtras().getParcelable(Contacts.KEY_CONTACT);
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT,"Nombre: "+contacts.getName()+" Telefono: "+contacts.getPhone());
-        sendIntent.setType("text/plain");
-        Intent.createChooser(sendIntent,"Share via");
-        startActivity(sendIntent);
+    public interface FragmentListener {
+        public void onEdit();
+        public void onDelete();
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-
+        try {
+            mCallback = (FragmentListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement FragmentListener");
+        }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+
+    }
 }

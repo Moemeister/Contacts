@@ -1,6 +1,7 @@
 package com.moesystems.contacts_parcial;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -21,7 +22,11 @@ public class ContactInfoActivity extends AppCompatActivity {
     private ImageView botonllamar;
     String number;
     AddContacts add;
+    Contacts contacts;
     private static final int PERMISSIONS_REQUEST_CALL = 101;
+    public static final String RESULTADO = "RESULTADO";
+    public static final String EDIT_CONTACT = "EDIT_CONTACT";
+    public static final String DEL_CONTACT = "DEL_CONTACT";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +39,7 @@ public class ContactInfoActivity extends AppCompatActivity {
 
         //reciviendo los datos
         Intent intent = getIntent();
-        Contacts contacts = intent.getExtras().getParcelable(Contacts.KEY_CONTACT);
+        contacts = intent.getExtras().getParcelable(Contacts.KEY_CONTACT);
         //PERMISSION CALLS
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(ContactInfoActivity.this, new String[]{Manifest.permission.CALL_PHONE}, PERMISSIONS_REQUEST_CALL);
@@ -77,6 +82,18 @@ public class ContactInfoActivity extends AppCompatActivity {
         startActivity(sendIntent);
 
 
+    }
+    public void Edit(View view){
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(RESULTADO,EDIT_CONTACT);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
+    }
+    public void Delete(View view){
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(RESULTADO,DEL_CONTACT);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 
 

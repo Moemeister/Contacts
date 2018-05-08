@@ -35,7 +35,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentViewer.FragmentListener {
     ArrayList<Contacts> list,favs;
     RecyclerView myrv;
     FragmentViewer fragmentViewer;
@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
     public static String KEY_LIST_FAVS = "KEY_LIST2";
     public static final int ADD_CONTACT = 2;
     public static final int EDIT_CONTACT = 1;
-    private static boolean firstime=true;
+    public static final int SHOW_CONTACT = 3;
+    public static final int DEL_CONTACT = 4;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClickCard(Contacts contacts) {
                 //pasando la informacion a la actividad
                 intents(contacts);
+                addedit =  contacts;
             }
         };
         //myrv.setLayoutManager(new GridLayoutManager(this,getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE? 2:3));
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             myrv.setLayoutManager(new GridLayoutManager(this,3));
         }
-        myrv.setAdapter(myAdapter);
+        //myrv.setAdapter(myAdapter);
         EditText filter = (EditText) findViewById(R.id.filter);
         filter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClickCard(Contacts contacts) {
                 //pasando la informacion a la actividad
                 intents(contacts);
+                addedit =  contacts;
             }
         };
         myrv.setAdapter(myAdapter);
@@ -198,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClickCard(Contacts contacts) {
                 //pasando la informacion a la actividad
                 intents(contacts);
+                addedit =  contacts;
             }
         };
         myrv.setAdapter(myAdapter);
@@ -251,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClickCard(Contacts contacts) {
                     //pasando la informacion a la actividad
                     intents(contacts);
+                    addedit =  contacts;
                 }
             };
             myrv.setAdapter(myAdapter);
@@ -259,10 +264,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void intents(Contacts contacts){
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            addedit = contacts;
             Intent intent = new Intent(getApplicationContext(), ContactInfoActivity.class);
             intent.putExtra(Contacts.KEY_CONTACT, contacts);
             //iniciar la actividad
-            startActivity(intent);
+            startActivityForResult(intent,SHOW_CONTACT);
         }else if (getResources().getConfiguration().orientation ==  Configuration.ORIENTATION_LANDSCAPE){
 
             fragmentViewer.updateContact(contacts);
@@ -282,6 +288,9 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(addIntent, ADD_CONTACT);
 
     }
+    public void DeleteContact(Contacts contacts){
+        myAdapter.borrarContacto(contacts);
+    }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -290,13 +299,43 @@ public class MainActivity extends AppCompatActivity {
                 if(resultCode == Activity.RESULT_OK) {
                     Contacts c = data.getParcelableExtra(AddContacts.EXTRA_CONTACT);
                     list.add(c);
-
                 }
                 addedit = null;
                 break;
+            case EDIT_CONTACT:
+                if(resultCode == Activity.RESULT_OK) {
+                    Contacts c = data.getParcelableExtra(AddContacts.EXTRA_CONTACT);
+                    myAdapter.actualizarContacto(addedit,c);
+
+                }
+                break;
+                case SHOW_CONTACT:
+                    if(data == null){
+                        return;
+                    }
+                    switch (data.getStringExtra(ContactInfoActivity.RESULTADO)){
+
+                        case ContactInfoActivity.EDIT_CONTACT:
+                            editarContacto(myAdapter,list,list.indexOf(addedit));
+                            break;
+                        case ContactInfoActivity.DEL_CONTACT:
+                            DeleteContact(addedit);
+                            break;
+                    }
+                    break;
+
         }
         myrv.setAdapter(myAdapter);
     }
 
-    
+
+    @Override
+    public void onEdit() {
+        editarContacto(myAdapter,list,list.indexOf(addedit));
+    }
+
+    @Override
+    public void onDelete() {
+        DeleteContact(addedit);
+    }
 }

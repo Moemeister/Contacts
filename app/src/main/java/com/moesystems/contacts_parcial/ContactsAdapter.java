@@ -90,7 +90,11 @@ public abstract class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapt
 
     }
 
-
+    public void actualizarContacto(Contacts oldContact, Contacts newContact){
+        int index = mData.indexOf(oldContact);
+        mData.set(index,newContact);
+        notifyItemChanged(index);
+    }
     @Override
     public int getItemCount() {
         return mData.size();
@@ -132,6 +136,12 @@ public abstract class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapt
     public void filterList(ArrayList<Contacts> filteredList) {
         mData = filteredList;
         notifyDataSetChanged();
+    }
+    public void borrarContacto(Contacts contacts){
+        int index = mData.indexOf(contacts);
+        mData.remove(contacts);
+        notifyItemRemoved(index);
+        notifyItemRangeChanged(index,getItemCount()-1);
     }
     public abstract void onClickCard (Contacts contacts);
 }

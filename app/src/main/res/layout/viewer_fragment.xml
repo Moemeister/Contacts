@@ -55,7 +55,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_call_black_24dp"
-
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/profile_phone"
@@ -66,7 +65,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_mode_edit_black_24dp"
-
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/profile_phone"
@@ -89,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_share_black_24dp"
                     android:scaleType="fitXY"
+                    android:onClick="Share"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/profile_phone"
                     android:clickable="true"
