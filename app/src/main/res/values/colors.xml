@@ -9,4 +9,6 @@
     <color name="btnskyblue">#007eb3</color>
     <color name="azul">#02597e</color>
     <color name="test_color">#2d2d2d</color>
+    <color name="grey">#c4bebe</color>
+    <color name="black">#000</color>
 </resources>

@@ -24,7 +24,9 @@ public class AddContacts extends AppCompatActivity {
     public static final String EXTRA_CONTACT = "EXTRA_CONTACT";
     private static final int PICK_IMAGE = 100;
     private Uri imageUri;
-
+    public Uri getimage(){
+        return imageUri;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,7 @@ public class AddContacts extends AppCompatActivity {
 
         nombre.setText(contacts.getName());
         telefono.setText(contacts.getPhone());
-        img.setImageResource(R.drawable.empty_face);
+        img.setImageResource(R.drawable.add);
 
 
     }
@@ -57,6 +59,7 @@ public class AddContacts extends AppCompatActivity {
         contacts.setName(nombre.getText().toString());
         contacts.setPhone(telefono.getText().toString());
         contacts.setImg(R.drawable.empty_face);
+        contacts.setImg2(imageUri);
         Intent returnIntent = new Intent();
         returnIntent.putExtra(EXTRA_CONTACT, contacts);
         setResult(Activity.RESULT_OK, returnIntent);

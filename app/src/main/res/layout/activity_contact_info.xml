@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/dark"
     android:padding="12dp"
     tools:context=".ContactInfoActivity">
 
@@ -27,11 +28,13 @@
             android:text="Name"
             android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
             android:layout_below="@+id/profile_pic"/>
         <TextView
             android:id="@+id/profile_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:layout_marginTop="15dp"
             android:text="Phone"
             android:layout_centerHorizontal="true"

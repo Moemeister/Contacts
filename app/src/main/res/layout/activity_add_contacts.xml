@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddContacts"
-
+    android:background="@color/dark"
     android:orientation="vertical"
     android:padding="8dp">
     <ImageView
@@ -14,7 +14,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
-        android:src="@drawable/empty_face"
+        android:src="@drawable/add"
         />
     <LinearLayout
         android:layout_marginTop="12dp"
@@ -25,11 +25,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nombre"
+            android:textColor="@color/white"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/txt_name_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             />
     </LinearLayout>
     <LinearLayout
@@ -40,12 +42,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/telefono"
+            android:textColor="@color/white"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/txt_phone_add"
             android:inputType="phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             />
     </LinearLayout>
     <Button
@@ -55,6 +59,8 @@
         android:text="@string/add_contact"
         android:layout_marginTop="12dp"
         android:onClick="saveContact"
+        android:padding="18dp"
+        android:background="@color/skyblue"
         android:layout_gravity="center"/>
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.moesystems.contacts_parcial;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,6 +8,7 @@ import android.os.Parcelable;
 public class Contacts implements Parcelable{
     private String name;
     private int img;
+    private Uri img2;
     private String phone;
     private boolean favorito;
     public static String KEY_CONTACT = "KEY_CONTACT";
@@ -19,6 +21,20 @@ public class Contacts implements Parcelable{
         this.img = img;
         this.phone = phone;
         favorito = false;
+    }
+    public Contacts(String name,String phone, Uri img2) {
+        this.name = name;
+        this.img2 = img2;
+        this.phone = phone;
+        favorito = false;
+    }
+
+    public Uri getImg2() {
+        return img2;
+    }
+
+    public void setImg2(Uri img2) {
+        this.img2 = img2;
     }
 
     protected Contacts(Parcel in) {
